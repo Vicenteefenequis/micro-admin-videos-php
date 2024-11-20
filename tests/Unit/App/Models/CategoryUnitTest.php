@@ -49,4 +49,17 @@ class CategoryUnitTest extends TestCase
 
         $this->assertEquals($castsNeeded, $casts);
     }
+
+    public function testFillables()
+    {
+
+        $expected = [
+            'id',
+            'name',
+            'description',
+            'is_active'
+        ];
+
+        $this->assertEquals($expected, $this->model()->getFillable());
+    }
 }
