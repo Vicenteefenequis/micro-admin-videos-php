@@ -6,9 +6,8 @@ use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use PHPUnit\Framework\TestCase;
 
-class CategoryUnitTest extends TestCase
+class CategoryUnitTest extends ModelTestCase
 {
     /**
      * A basic unit test example.
@@ -20,46 +19,31 @@ class CategoryUnitTest extends TestCase
         return new Category();
     }
 
-    public function testIfUseTraits()
-    {
 
-        $traitsNeeded = [
+    protected function traits(): array
+    {
+        return [
             HasFactory::class,
             SoftDeletes::class
         ];
-        $traitsUsed = array_keys(class_uses($this->model()));
-
-        $this->assertEquals($traitsNeeded, $traitsUsed);
     }
 
-    public function testIncrementingIsFalse()
+    protected function fillables(): array
     {
-        $model = $this->model();
-        $this->assertFalse($model->getIncrementing());
-    }
-
-    public function testHasCasts()
-    {
-        $castsNeeded = [
-            'id' => 'string',
-            'is_active' => 'boolean',
-            'deleted_at' => 'datetime',
-        ];
-        $casts = $this->model()->getCasts();
-
-        $this->assertEquals($castsNeeded, $casts);
-    }
-
-    public function testFillables()
-    {
-
-        $expected = [
+        return [
             'id',
             'name',
             'description',
             'is_active'
         ];
+    }
 
-        $this->assertEquals($expected, $this->model()->getFillable());
+    protected function casts(): array
+    {
+        return [
+            'id' => 'string',
+            'is_active' => 'boolean',
+            'deleted_at' => 'datetime',
+        ];
     }
 }
