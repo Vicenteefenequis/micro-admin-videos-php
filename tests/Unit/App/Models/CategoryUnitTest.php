@@ -31,4 +31,10 @@ class CategoryUnitTest extends TestCase
 
         $this->assertEquals($traitsNeeded, $traitsUsed);
     }
+
+    public function testIncrementingIsFalse()
+    {
+        $model = $this->model();
+        $this->assertFalse($model->getIncrementing());
+    }
 }
