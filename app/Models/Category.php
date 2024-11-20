@@ -19,7 +19,8 @@ class Category extends Model
 
     protected $casts = [
         'id' => 'string',
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
+        'deleted_at' => 'datetime',
     ];
 
     public $incrementing = false;

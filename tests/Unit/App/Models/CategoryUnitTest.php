@@ -37,4 +37,16 @@ class CategoryUnitTest extends TestCase
         $model = $this->model();
         $this->assertFalse($model->getIncrementing());
     }
+
+    public function testHasCasts()
+    {
+        $castsNeeded = [
+            'id' => 'string',
+            'is_active' => 'boolean',
+            'deleted_at' => 'datetime',
+        ];
+        $casts = $this->model()->getCasts();
+
+        $this->assertEquals($castsNeeded, $casts);
+    }
 }
