@@ -57,7 +57,7 @@ class CategoryEloquentRepository implements CategoryRepositoryInterface
     {
         $query = $this->model;
 
-        if($filter) {
+        if ($filter) {
             $query->where('name', 'LIKE', '%' . $filter . '%');
         }
         $query->orderBy('id', $order);
@@ -68,24 +68,24 @@ class CategoryEloquentRepository implements CategoryRepositoryInterface
 
     public function update(Category $category): Category
     {
-       if(!$categoryDb = $this->model->find($category->id)) {
-           throw new NotFoundException();
-       }
+        if (!$categoryDb = $this->model->find($category->id)) {
+            throw new NotFoundException();
+        }
 
         $categoryDb->update([
-           'name' => $category->name,
-           'description' => $category->description,
-           'is_active' => $category->isActive,
-       ]);
+            'name' => $category->name,
+            'description' => $category->description,
+            'is_active' => $category->isActive,
+        ]);
 
-       $categoryDb->refresh();
+        $categoryDb->refresh();
 
-       return $this->toCategory($categoryDb);
+        return $this->toCategory($categoryDb);
     }
 
     public function delete(string $categoryId): bool
     {
-        if(!$categoryDb = $this->model->find($categoryId)) {
+        if (!$categoryDb = $this->model->find($categoryId)) {
             throw new NotFoundException();
         }
 
@@ -94,10 +94,14 @@ class CategoryEloquentRepository implements CategoryRepositoryInterface
 
     private function toCategory(object $object): Category
     {
-        return new Category(
+        $entity = new Category(
             id: $object->id,
             name: $object->name,
+            description: $object->description,
         );
 
+        ($object->is_active) ? $entity->activate() : $entity->disable();
+
+        return $entity;
     }
 }
