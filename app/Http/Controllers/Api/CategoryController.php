@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Resources\CategoryResource;
+use Core\UseCase\DTO\Category\CategoryInputDto;
 use Core\UseCase\DTO\Category\CreateCategory\CategoryCreateInputDto;
 use Core\UseCase\DTO\Category\ListCategories\ListCategoriesInputDto;
-use Core\UseCase\Category\{CreateCategoryUseCase, ListCategoriesUseCase};
+use Core\UseCase\Category\{CreateCategoryUseCase, ListCategoriesUseCase, ListCategoryUseCase};
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -48,6 +49,12 @@ class CategoryController extends Controller
         );
 
         return (new CategoryResource(collect($response)))->response()->setStatusCode(ResponseAlias::HTTP_CREATED);
+    }
+
+    public function show(ListCategoryUseCase $useCase, $id)
+    {
+        $response = $useCase->execute(new CategoryInputDto($id));
+        return (new CategoryResource(collect($response)))->response();
     }
 
 
