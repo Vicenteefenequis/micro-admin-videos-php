@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use Core\UseCase\DTO\Category\CategoryInputDto;
 use Core\UseCase\DTO\Category\CreateCategory\CategoryCreateInputDto;
 use Core\UseCase\DTO\Category\ListCategories\ListCategoriesInputDto;
-use Core\UseCase\Category\{CreateCategoryUseCase, ListCategoriesUseCase, ListCategoryUseCase};
+use Core\UseCase\DTO\Category\UpdateCategory\CategoryUpdateInputDto;
+use Core\UseCase\Category\{CreateCategoryUseCase, ListCategoriesUseCase, ListCategoryUseCase, UpdateCategoryUseCase};
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -54,6 +56,15 @@ class CategoryController extends Controller
     public function show(ListCategoryUseCase $useCase, $id)
     {
         $response = $useCase->execute(new CategoryInputDto($id));
+        return (new CategoryResource(collect($response)))->response();
+    }
+
+    public function update(UpdateCategoryRequest $request, UpdateCategoryUseCase $useCase, $id)
+    {
+        $response = $useCase->execute(new CategoryUpdateInputDto(
+            id: $id,
+            name: $request->name,
+        ));
         return (new CategoryResource(collect($response)))->response();
     }
 
