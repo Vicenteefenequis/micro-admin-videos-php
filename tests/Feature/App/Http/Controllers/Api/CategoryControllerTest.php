@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category as Model;
 use App\Repositories\Eloquent\CategoryEloquentRepository;
 use Core\UseCase\Category\CreateCategoryUseCase;
+use Core\UseCase\Category\DeleteCategoryUseCase;
 use Core\UseCase\Category\ListCategoriesUseCase;
 use Core\UseCase\Category\ListCategoryUseCase;
 use Core\UseCase\Category\UpdateCategoryUseCase;
@@ -81,5 +82,17 @@ class CategoryControllerTest extends TestCase
 
         $this->assertInstanceOf(JsonResponse::class, $response);
         $this->assertEquals(ResponseAlias::HTTP_OK, $response->getStatusCode());
+    }
+
+    public function test_delete()
+    {
+        $category = Model::factory()->create();
+
+        $response = $this->controller->destroy(
+            useCase: new DeleteCategoryUseCase($this->repository),
+            id: $category->id,
+        );
+
+        $this->assertEquals(ResponseAlias::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 }
