@@ -10,7 +10,12 @@ use Core\UseCase\DTO\Category\CategoryInputDto;
 use Core\UseCase\DTO\Category\CreateCategory\CategoryCreateInputDto;
 use Core\UseCase\DTO\Category\ListCategories\ListCategoriesInputDto;
 use Core\UseCase\DTO\Category\UpdateCategory\CategoryUpdateInputDto;
-use Core\UseCase\Category\{CreateCategoryUseCase, ListCategoriesUseCase, ListCategoryUseCase, UpdateCategoryUseCase};
+use Core\UseCase\Category\{CreateCategoryUseCase,
+    DeleteCategoryUseCase,
+    ListCategoriesUseCase,
+    ListCategoryUseCase,
+    UpdateCategoryUseCase
+};
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -66,6 +71,12 @@ class CategoryController extends Controller
             name: $request->name,
         ));
         return (new CategoryResource(collect($response)))->response();
+    }
+
+    public function destroy(DeleteCategoryUseCase $useCase, $id)
+    {
+        $useCase->execute(new CategoryInputDto($id));
+        return response()->noContent();
     }
 
 
