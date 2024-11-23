@@ -132,5 +132,28 @@ class CategoryApiTest extends TestCase
         ]);
     }
 
+    public function test_update()
+    {
+        $data = [
+            'name' => 'Category Updated',
+        ];
+        $category = Category::factory()->create();
+        $response = $this->putJson("$this->endpoint/$category->id", $data);
+
+        $response->assertStatus(ResponseAlias::HTTP_OK);
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'name',
+                'description',
+                'is_active',
+                'created_at'
+            ]
+        ]);
+        $this->assertDatabaseHas('categories', [
+            'name' => 'Category Updated',
+        ]);
+    }
+
 
 }
