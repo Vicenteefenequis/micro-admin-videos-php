@@ -108,4 +108,14 @@ class CategoryApiTest extends TestCase
             ]
         ]);
     }
+
+    public function test_not_found_update()
+    {
+        $data = [
+            'name' => 'New Category',
+        ];
+        $response = $this->putJson("$this->endpoint/fake_value", $data);
+
+        $response->assertStatus(ResponseAlias::HTTP_NOT_FOUND);
+    }
 }
