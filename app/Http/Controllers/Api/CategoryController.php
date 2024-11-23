@@ -71,6 +71,7 @@ class CategoryController extends Controller
         $response = $useCase->execute(new CategoryUpdateInputDto(
             id: $id,
             name: $request->name,
+            description: $request->description
         ));
         return (new CategoryResource($response))->response();
     }

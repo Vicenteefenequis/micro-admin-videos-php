@@ -26,6 +26,7 @@ class UpdateCategoryUseCase
 
         $categoryUpdated = $this->repository->update($category);
 
+
         return new CategoryUpdateOutputDto(
             id: $categoryUpdated->id,
             name: $categoryUpdated->name,

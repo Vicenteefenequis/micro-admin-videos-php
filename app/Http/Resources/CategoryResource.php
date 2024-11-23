@@ -18,7 +18,7 @@ class CategoryResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'description' => $this->name,
+            'description' => $this->description,
             'is_active' => $this->is_active,
             'created_at' => Carbon::make($this->created_at)->format('Y-m-d H:i:s'),
         ];

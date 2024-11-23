@@ -78,7 +78,7 @@ class CategoryEloquentRepository implements CategoryRepositoryInterface
             'is_active' => $category->isActive,
         ]);
 
-        $categoryDb->refresh();
+
 
         return $this->toCategory($categoryDb);
     }
@@ -101,6 +101,7 @@ class CategoryEloquentRepository implements CategoryRepositoryInterface
         );
 
         ($object->is_active) ? $entity->activate() : $entity->disable();
+
 
         return $entity;
     }
