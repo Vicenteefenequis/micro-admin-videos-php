@@ -90,4 +90,22 @@ class CategoryApiTest extends TestCase
             ]
         ]);
     }
+
+    public function test_store()
+    {
+        $data = [
+            'name' => 'New Category',
+        ];
+        $response = $this->postJson($this->endpoint, $data);
+        $response->assertStatus(ResponseAlias::HTTP_CREATED);
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'name',
+                'description',
+                'is_active',
+                'created_at'
+            ]
+        ]);
+    }
 }
