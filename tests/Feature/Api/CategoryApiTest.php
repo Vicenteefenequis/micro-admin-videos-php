@@ -155,5 +155,11 @@ class CategoryApiTest extends TestCase
         ]);
     }
 
+    public function test_not_found_delete()
+    {
+        $response = $this->deleteJson("$this->endpoint/fake_value");
+        $response->assertStatus(ResponseAlias::HTTP_NOT_FOUND);
+    }
+
 
 }
