@@ -3,6 +3,7 @@
 namespace Tests\Feature\Api;
 
 use App\Models\Category;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Tests\TestCase;
 
 class CategoryApiTest extends TestCase
@@ -74,5 +75,19 @@ class CategoryApiTest extends TestCase
         ]);
 
         $this->assertEquals($category->id, $response->json('data.id'));
+    }
+
+    public function test_validations_store()
+    {
+        $data = [];
+        $response = $this->postJson($this->endpoint, $data);
+
+        $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'name'
+            ]
+        ]);
     }
 }
