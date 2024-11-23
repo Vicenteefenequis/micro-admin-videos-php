@@ -22,7 +22,7 @@ class CategoryControllerUnitTest extends TestCase
         $mockRequest->shouldReceive('get')->andReturn('teste');
 
         $mockDtoOutput = Mockery::mock(ListCategoriesOutputDto::class, [
-            [], 1, 1, 1, 1, 1, 1
+            [], 1, 1, 1, 1, 1, 1, 1
         ]);
 
         $mockUseCase = Mockery::mock(ListCategoriesUseCase::class);
