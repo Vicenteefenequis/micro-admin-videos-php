@@ -16,6 +16,7 @@ class CategoryApiTest extends TestCase
         $response = $this->getJson($this->endpoint);
 
         $response->assertStatus(200);
+        $response->assertJsonCount(0, 'data');
     }
 
     public function test_list_all_categories()
@@ -38,18 +39,20 @@ class CategoryApiTest extends TestCase
                 'from'
             ]
         ]);
+        $response->assertJsonCount(15, 'data');
     }
 
     public function test_list_paginate_categories()
     {
-        Category::factory()->count(30)->create();
+        Category::factory()->count(25)->create();
 
         $response = $this->getJson("$this->endpoint?page=2");
 
         $response->assertStatus(200);
 
         $this->assertEquals(2, $response->json('meta.current_page'));
-        $this->assertEquals(30, $response->json('meta.total'));
+        $this->assertEquals(25, $response->json('meta.total'));
+        $response->assertJsonCount(10, 'data');
     }
 
     public function test_list_category_not_found()
