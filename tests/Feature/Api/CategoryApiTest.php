@@ -118,4 +118,19 @@ class CategoryApiTest extends TestCase
 
         $response->assertStatus(ResponseAlias::HTTP_NOT_FOUND);
     }
+
+    public function test_validations_update()
+    {
+        $response = $this->putJson("$this->endpoint/fake_value", []);
+
+        $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'name'
+            ]
+        ]);
+    }
+
+
 }
