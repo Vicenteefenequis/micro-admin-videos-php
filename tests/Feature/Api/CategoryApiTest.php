@@ -8,7 +8,7 @@ use Tests\TestCase;
 class CategoryApiTest extends TestCase
 {
 
-    protected string $endpoint = '/api/categories/';
+    protected string $endpoint = '/api/categories';
 
     public function test_list_empty_categories()
     {
@@ -45,11 +45,15 @@ class CategoryApiTest extends TestCase
 
         $response = $this->getJson("$this->endpoint?page=2");
 
-        $response->dump();
-
         $response->assertStatus(200);
 
         $this->assertEquals(2, $response->json('meta.current_page'));
         $this->assertEquals(30, $response->json('meta.total'));
+    }
+
+    public function test_list_category_not_found()
+    {
+        $response = $this->getJson("$this->endpoint/fake_value");
+        $response->assertStatus(404);
     }
 }
