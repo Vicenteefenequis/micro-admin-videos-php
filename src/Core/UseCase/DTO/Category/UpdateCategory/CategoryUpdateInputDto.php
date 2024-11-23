@@ -8,6 +8,6 @@ class CategoryUpdateInputDto
         public string $id,
         public string $name,
         public string|null $description = null,
-        public bool $isActive = true,
+        public bool $is_active = true,
     ) {}
 }

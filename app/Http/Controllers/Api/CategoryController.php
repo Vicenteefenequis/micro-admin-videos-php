@@ -72,7 +72,7 @@ class CategoryController extends Controller
             id: $id,
             name: $request->name,
         ));
-        return (new CategoryResource(collect($response)))->response();
+        return (new CategoryResource($response))->response();
     }
 
     public function destroy(DeleteCategoryUseCase $useCase, $id)
