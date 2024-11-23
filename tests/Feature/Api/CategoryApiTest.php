@@ -56,4 +56,23 @@ class CategoryApiTest extends TestCase
         $response = $this->getJson("$this->endpoint/fake_value");
         $response->assertStatus(404);
     }
+
+    public function test_list_category()
+    {
+        $category = Category::factory()->create();
+        $response = $this->getJson("$this->endpoint/{$category->id}");
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'name',
+                'description',
+                'is_active',
+                'created_at'
+            ]
+        ]);
+
+        $this->assertEquals($category->id, $response->json('data.id'));
+    }
 }

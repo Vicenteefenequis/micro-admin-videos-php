@@ -62,7 +62,8 @@ class CategoryController extends Controller
     public function show(ListCategoryUseCase $useCase, $id)
     {
         $response = $useCase->execute(new CategoryInputDto($id));
-        return (new CategoryResource(collect($response)))->response();
+
+        return (new CategoryResource($response))->response();
     }
 
     public function update(UpdateCategoryRequest $request, UpdateCategoryUseCase $useCase, $id)
