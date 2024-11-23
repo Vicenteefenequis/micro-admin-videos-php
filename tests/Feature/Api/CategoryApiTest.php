@@ -161,5 +161,15 @@ class CategoryApiTest extends TestCase
         $response->assertStatus(ResponseAlias::HTTP_NOT_FOUND);
     }
 
+    public function test_delete()
+    {
+        $category = Category::factory()->create();
+        $response = $this->deleteJson("$this->endpoint/$category->id");
+        $response->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
+        $this->assertSoftDeleted('categories', [
+            'id' => $category->id,
+        ]);
+    }
+
 
 }
