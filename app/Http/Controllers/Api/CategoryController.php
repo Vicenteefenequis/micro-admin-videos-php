@@ -56,7 +56,7 @@ class CategoryController extends Controller
             )
         );
 
-        return (new CategoryResource(collect($response)))->response()->setStatusCode(ResponseAlias::HTTP_CREATED);
+        return (new CategoryResource($response))->response()->setStatusCode(ResponseAlias::HTTP_CREATED);
     }
 
     public function show(ListCategoryUseCase $useCase, $id)
