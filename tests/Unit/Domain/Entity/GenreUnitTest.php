@@ -48,4 +48,15 @@ class GenreUnitTest extends TestCase
 
         $this->assertFalse($genre->isActive);
     }
+
+    public function testActivate()
+    {
+        $genre = new Genre(
+            name: 'New Name',
+            isActive: false,
+        );
+        $this->assertFalse($genre->isActive);
+        $genre->activate();
+        $this->assertTrue($genre->isActive);
+    }
 }
