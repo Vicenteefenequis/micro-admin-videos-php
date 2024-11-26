@@ -3,6 +3,7 @@
 namespace Tests\Unit\Domain\Entity;
 
 use Core\Domain\Entity\Genre;
+use Core\Domain\Exception\EntityValidationException;
 use Core\Domain\ValueObject\Uuid;
 use DateTime;
 use PHPUnit\Framework\TestCase;
@@ -71,5 +72,25 @@ class GenreUnitTest extends TestCase
         );
 
         $this->assertEquals('Name Updated', $genre->name);
+    }
+
+    public function testEntityExceptions()
+    {
+        $this->expectException(EntityValidationException::class);
+        new Genre(
+            name: 'N',
+        );
+    }
+
+    public function testEntityUpdateExceptions()
+    {
+        $this->expectException(EntityValidationException::class);
+        $genre = new Genre(
+            name: 'New Name',
+        );
+
+        $genre->update(
+            name: 'N',
+        );
     }
 }
