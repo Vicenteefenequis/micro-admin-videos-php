@@ -12,12 +12,11 @@ class Genre
 
     use MethodsMagicsTrait;
 
-    protected array $categoriesId = [];
-
     public function __construct(
         protected string $name,
         protected ?Uuid  $id = null,
         protected bool $isActive = true,
+        protected array $categoriesId = [],
         protected ?DateTime $createdAt = null,
     )
     {
@@ -46,6 +45,11 @@ class Genre
     public function addCategory(string $categoryId)
     {
         $this->categoriesId[] = $categoryId;
+    }
+
+    public function removeCategory(string $categoryId)
+    {
+        $this->categoriesId = array_diff($this->categoriesId, [$categoryId]);
     }
 
     protected function validate()
