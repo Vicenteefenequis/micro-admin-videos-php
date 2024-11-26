@@ -27,4 +27,9 @@ class Genre
         $this->isActive = false;
     }
 
+    public function activate()
+    {
+        $this->isActive = true;
+    }
+
 }
