@@ -22,4 +22,9 @@ class Genre
         $this->createdAt ??= new DateTime();
     }
 
+    public function deactivate()
+    {
+        $this->isActive = false;
+    }
+
 }
