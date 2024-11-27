@@ -79,7 +79,6 @@ class CategoryEloquentRepository implements CategoryRepositoryInterface
         ]);
 
 
-
         return $this->toCategory($categoryDb);
     }
 
@@ -104,5 +103,10 @@ class CategoryEloquentRepository implements CategoryRepositoryInterface
 
 
         return $entity;
+    }
+
+    public function getIdsListIds(array $categoryIds): array
+    {
+        return $this->model->whereIn('id', $categoryIds)->get()->toArray();
     }
 }
