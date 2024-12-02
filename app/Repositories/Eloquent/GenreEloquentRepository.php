@@ -38,9 +38,11 @@ class GenreEloquentRepository implements GenreRepositoryInterface
 
     public function findById(string $genreId): Entity
     {
-        if(!$genre = $this->model->find($genreId)) {
+        if(!$genreDb = $this->model->find($genreId)) {
             throw new NotFoundException("Genre {$genreId} not found");
         }
+
+        return $this->toGenre($genreDb);
     }
 
     public function findAll(string $filter = '', $order = 'DESC'): array
