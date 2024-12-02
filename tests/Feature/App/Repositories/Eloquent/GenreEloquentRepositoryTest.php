@@ -96,4 +96,19 @@ class GenreEloquentRepositoryTest extends TestCase
         $this->assertEquals($genre->name, $response->name);
     }
 
+    public function testFindAll()
+    {
+        Model::factory()->count(10)->create();
+        $response = $this->repository->findAll();
+
+        $this->assertCount(10, $response);
+    }
+
+    public function testFindAllEmpty()
+    {
+        $response = $this->repository->findAll();
+
+        $this->assertCount(0, $response);
+    }
+
 }
