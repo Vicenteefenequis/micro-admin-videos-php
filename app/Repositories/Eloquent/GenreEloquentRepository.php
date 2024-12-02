@@ -47,12 +47,11 @@ class GenreEloquentRepository implements GenreRepositoryInterface
 
     public function findAll(string $filter = '', $order = 'DESC'): array
     {
-        $query = $this->model;
-        if($filter) {
-            $query->where('name', 'like', '%' . $filter . '%');
-        }
-        $result = $query->get();
-
+        $result = $this->model->where(function ($query) use ($filter) {
+            if($filter) {
+                $query->where('name', 'like', '%' . $filter . '%');
+            }
+        })->get();
         return $result->toArray();
     }
 
