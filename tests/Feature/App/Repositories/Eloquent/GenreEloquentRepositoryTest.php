@@ -86,4 +86,14 @@ class GenreEloquentRepositoryTest extends TestCase
         $this->repository->findById($genre_id);
     }
 
+    public function testFindById()
+    {
+        $genre = Model::factory()->create();
+
+        $response = $this->repository->findById($genre->id);
+
+        $this->assertEquals($genre->id, $response->id);
+        $this->assertEquals($genre->name, $response->name);
+    }
+
 }
