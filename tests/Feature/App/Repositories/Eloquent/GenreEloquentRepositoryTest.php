@@ -111,4 +111,20 @@ class GenreEloquentRepositoryTest extends TestCase
         $this->assertCount(0, $response);
     }
 
+    public function testFindAllByFilter()
+    {
+        Model::factory()->count(10)->create([
+            'name' => 'teste'
+        ]);
+        Model::factory()->count(10)->create();
+
+        $response = $this->repository->findAll(filter: 'teste');
+
+        $this->assertCount(10, $response);
+
+        $response = $this->repository->findAll();
+
+        $this->assertCount(20, $response);
+    }
+
 }
