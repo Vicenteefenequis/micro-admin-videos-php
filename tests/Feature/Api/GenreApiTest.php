@@ -29,12 +29,33 @@ class GenreApiTest extends TestCase
     public function test_store()
     {
         $categories = CategoryModel::factory()->count(10)->create();
-        $response = $this->postJson($this->endpoint,[
+        $response = $this->postJson($this->endpoint, [
             'name' => 'new genre',
             'is_active' => true,
             'categories_ids' => $categories->pluck('id')->toArray()
         ]);
 
         $response->assertStatus(ResponseAlias::HTTP_CREATED);
+    }
+
+    public function test_validation_store()
+    {
+        $categories = CategoryModel::factory()->count(2)->create();
+
+        $payload = [
+            'name' => '',
+            'is_active' => true,
+            'categories_ids' => $categories->pluck('id')->toArray()
+        ];
+
+        $response = $this->postJson($this->endpoint, $payload);
+
+        $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'name'
+            ]
+        ]);
     }
 }
