@@ -194,5 +194,21 @@ class GenreEloquentRepositoryTest extends TestCase
         $this->repository->update($entity);
     }
 
+    public function testDeleteNotFound()
+    {
+        $this->expectException(NotFoundException::class);
+        $this->repository->delete('fake_id');
+    }
+
+    public function testDelete()
+    {
+        $genre = Model::factory()->create();
+        $response = $this->repository->delete($genre->id);
+        $this->assertTrue($response);
+        $this->assertSoftDeleted('genres', [
+            'id' => $genre->id
+        ]);
+    }
+
 
 }
