@@ -3,10 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreGenre;
 use App\Http\Resources\GenreResource;
+use Core\UseCase\DTO\Genre\Create\GenreCreateInputDto;
 use Core\UseCase\DTO\Genre\List\ListGenresInputDto;
+use Core\UseCase\Genre\CreateGenreUseCase;
 use Core\UseCase\Genre\ListGenresUseCase;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class GenreController extends Controller
 {
@@ -41,18 +46,26 @@ class GenreController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \App\Http\Requests\StoreGenre $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(StoreGenre $request, CreateGenreUseCase $useCase)
     {
-        //
+        $response = $useCase->execute(
+            input: new GenreCreateInputDto(
+                name: $request->name,
+                categoriesId: $request->categories_ids,
+                isActive: true
+            )
+        );
+
+        return (new GenreResource($response))->response()->setStatusCode(ResponseAlias::HTTP_CREATED);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -63,8 +76,8 @@ class GenreController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -75,7 +88,7 @@ class GenreController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

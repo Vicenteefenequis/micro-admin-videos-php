@@ -45,10 +45,11 @@ class CreateGenreUseCase
 
             $this->transaction->commit();
 
+
             return new GenreCreateOutputDto(
                 id: (string)$genreDb->id,
                 name: $genreDb->name,
-                isActive: $genreDb->isActive,
+                is_active: $genreDb->isActive,
                 created_at: $genreDb->createdAt()
             );
 
