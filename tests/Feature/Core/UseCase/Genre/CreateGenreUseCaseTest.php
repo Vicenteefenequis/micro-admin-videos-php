@@ -11,6 +11,7 @@ use Core\Domain\Exception\NotFoundException;
 use Core\UseCase\DTO\Genre\Create\GenreCreateInputDto;
 use Core\UseCase\Genre\CreateGenreUseCase;
 use Tests\TestCase;
+use Throwable;
 
 class CreateGenreUseCaseTest extends TestCase
 {
@@ -62,5 +63,33 @@ class CreateGenreUseCaseTest extends TestCase
                 categoriesId: $categoriesId
             )
         );
+    }
+
+    public function test_insert_transactions()
+    {
+        $this->expectException(NotFoundException::class);
+
+        $repository = new GenreEloquentRepository(new Model());
+        $repositoryCategory = new CategoryEloquentRepository(new ModelCategory());
+
+        $useCase = new CreateGenreUseCase($repository, new TransactionDb(), $repositoryCategory);
+
+        $categories = ModelCategory::factory()->count(10)->create();
+        $categoriesId = $categories->pluck('id')->toArray();
+
+       try {
+           $useCase->execute(
+               new GenreCreateInputDto(
+                   name: 'teste',
+                   categoriesId: $categoriesId
+               )
+           );
+           $this->assertDatabaseHas('genres', [
+               'name' => 'teste'
+           ]);
+       } catch(Throwable) {
+           $this->assertDatabaseCount('category_genre', 0);
+           $this->assertDatabaseCount('genres', 0);
+       }
     }
 }
