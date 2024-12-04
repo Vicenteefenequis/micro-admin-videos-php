@@ -4,13 +4,17 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreGenre;
+use App\Http\Requests\UpdateGenre;
 use App\Http\Resources\GenreResource;
 use Core\UseCase\DTO\Genre\Create\GenreCreateInputDto;
 use Core\UseCase\DTO\Genre\GenreInputDto;
 use Core\UseCase\DTO\Genre\List\ListGenresInputDto;
+use Core\UseCase\DTO\Genre\Update\GenreUpdateInputDto;
 use Core\UseCase\Genre\CreateGenreUseCase;
+use Core\UseCase\Genre\DeleteGenreUseCase;
 use Core\UseCase\Genre\ListGenresUseCase;
 use Core\UseCase\Genre\ListGenreUseCase;
+use Core\UseCase\Genre\UpdateGenreUseCase;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -84,11 +88,19 @@ class GenreController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return GenreResource
      */
-    public function update(Request $request, $id)
+    public function update(UpdateGenre $request, UpdateGenreUseCase $useCase, $id)
     {
-        //
+        $response = $useCase->execute(
+            input: new GenreUpdateInputDto(
+                id: $id,
+                name: $request->name,
+                categoriesIds: $request->categories_ids
+            )
+        );
+
+        return new GenreResource($response);
     }
 
     /**
@@ -97,8 +109,11 @@ class GenreController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(DeleteGenreUseCase $useCase,$id)
     {
-        //
+        $useCase->execute(
+            input: new GenreInputDto($id)
+        );
+        return response()->noContent();
     }
 }

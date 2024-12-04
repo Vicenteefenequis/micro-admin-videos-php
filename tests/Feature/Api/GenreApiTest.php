@@ -80,4 +80,63 @@ class GenreApiTest extends TestCase
         ]);
 
     }
+
+    public function test_update_not_found()
+    {
+        $categories = CategoryModel::factory()->count(2)->create();
+        $response = $this->putJson("{$this->endpoint}/fake_value", [
+            'name' => 'New Name',
+            'categories_ids' => $categories->pluck('id')->toArray()
+        ]);
+        $response->assertStatus(ResponseAlias::HTTP_NOT_FOUND);
+    }
+
+
+    public function test_update()
+    {
+        $genre = Model::factory()->create();
+        $categories = CategoryModel::factory()->count(2)->create();
+        $response = $this->putJson("{$this->endpoint}/{$genre->id}", [
+            'name' => 'New Name',
+            'categories_ids' => $categories->pluck('id')->toArray()
+        ]);
+        $response->assertStatus(ResponseAlias::HTTP_OK);
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'name',
+                'is_active'
+            ]
+        ]);
+    }
+
+    public function test_update_validations()
+    {
+
+        $response = $this->putJson("{$this->endpoint}/fake_value", [
+            'name' => 'New Name',
+            'categories_ids' => []
+        ]);
+        $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'categories_ids'
+            ]
+        ]);
+    }
+
+    public function test_destroy_not_found()
+    {
+        $response = $this->deleteJson("{$this->endpoint}/fake_value");
+        $response->assertStatus(ResponseAlias::HTTP_NOT_FOUND);
+    }
+
+    public function test_delete()
+    {
+        $genre = Model::factory()->create();
+        $response = $this->deleteJson("{$this->endpoint}/{$genre->id}");
+        $response->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
+    }
+
 }

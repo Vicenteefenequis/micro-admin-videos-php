@@ -7,7 +7,7 @@ class GenreUpdateOutputDto
     public function __construct(
         public string $id,
         public string $name,
-        public bool   $isActive,
+        public bool   $is_active,
         public string $created_at
     )
     {

@@ -49,7 +49,7 @@ class UpdateGenreUseCase
             return new GenreUpdateOutputDto(
                 id: (string)$genreDb->id,
                 name: $genreDb->name,
-                isActive: $genreDb->isActive,
+                is_active: $genreDb->isActive,
                 created_at: $genreDb->createdAt()
             );
 
