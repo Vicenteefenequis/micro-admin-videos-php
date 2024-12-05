@@ -10,9 +10,11 @@ use Core\UseCase\DTO\CastMember\ListCastMembers\ListCastMembersOutputDto;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Tests\Unit\UseCase\UseCaseTrait;
 
 class ListCastMembersUseCaseUnitTest extends TestCase
 {
+    use UseCaseTrait;
     /**
      * A basic unit test example.
      *
@@ -37,18 +39,5 @@ class ListCastMembersUseCaseUnitTest extends TestCase
         Mockery::close();
     }
 
-    protected function mockPagination(array $items = [])
-    {
-        $this->mockPagination = Mockery::mock(stdClass::class, PaginationInterface::class);
-        $this->mockPagination->shouldReceive('items')->andReturn($items);
-        $this->mockPagination->shouldReceive('total')->andReturn(0);
-        $this->mockPagination->shouldReceive('currentPage')->andReturn(0);
-        $this->mockPagination->shouldReceive('firstPage')->andReturn(0);
-        $this->mockPagination->shouldReceive('lastPage')->andReturn(0);
-        $this->mockPagination->shouldReceive('perPage')->andReturn(0);
-        $this->mockPagination->shouldReceive('to')->andReturn(0);
-        $this->mockPagination->shouldReceive('from')->andReturn(0);
 
-        return $this->mockPagination;
-    }
 }
