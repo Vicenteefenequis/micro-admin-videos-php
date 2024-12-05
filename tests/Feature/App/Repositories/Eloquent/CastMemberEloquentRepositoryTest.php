@@ -9,6 +9,7 @@ use Core\Domain\Enum\CastMemberType;
 use Core\Domain\Exception\NotFoundException;
 use Core\Domain\Repository\CastMemberRepositoryInterface;
 use Core\Domain\Repository\PaginationInterface;
+use Core\Domain\ValueObject\Uuid;
 use Tests\TestCase;
 
 class CastMemberEloquentRepositoryTest extends TestCase
@@ -77,5 +78,20 @@ class CastMemberEloquentRepositoryTest extends TestCase
         $this->assertInstanceOf(PaginationInterface::class, $response);
         $this->assertCount(15, $response->items());
         $this->assertEquals(20, $response->total());
+    }
+
+    public function testUpdate()
+    {
+        $castMember = Model::factory()->create();
+
+        $entity = new Entity(
+            name: 'Teste',
+            type: CastMemberType::ACTOR,
+            id: new Uuid($castMember->id)
+        );
+        $response = $this->repository->update($entity);
+
+        $this->assertEquals('Teste', $response->name);
+        $this->assertEquals(CastMemberType::ACTOR, $response->type);
     }
 }
