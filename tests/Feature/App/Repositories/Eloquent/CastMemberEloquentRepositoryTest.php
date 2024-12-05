@@ -103,4 +103,17 @@ class CastMemberEloquentRepositoryTest extends TestCase
             type: CastMemberType::ACTOR,
         ));
     }
+
+    public function testDelete()
+    {
+        $castMember = Model::factory()->create();
+        $response = $this->repository->delete($castMember->id);
+        $this->assertTrue($response);
+    }
+
+    public function testDeleteNotFound()
+    {
+        $this->expectException(NotFoundException::class);
+        $this->repository->delete('fake_id');
+    }
 }
