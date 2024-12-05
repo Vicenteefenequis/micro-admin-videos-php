@@ -26,4 +26,16 @@ class CastMemberApiTest extends TestCase
         $response->assertStatus(ResponseAlias::HTTP_OK);
         $response->assertJsonCount(15, 'data');
     }
+
+    public function test_paginate_two()
+    {
+        CastMember::factory()->count(25)->create();
+        $response = $this->getJson("$this->endpoint?page=2");
+
+        $response->assertStatus(ResponseAlias::HTTP_OK);
+
+        $this->assertEquals(2, $response->json('meta.current_page'));
+        $this->assertEquals(25, $response->json('meta.total'));
+        $response->assertJsonCount(10, 'data');
+    }
 }
