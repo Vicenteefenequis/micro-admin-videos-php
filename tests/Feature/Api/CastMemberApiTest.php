@@ -56,7 +56,7 @@ class CastMemberApiTest extends TestCase
         $response->assertStatus(ResponseAlias::HTTP_NOT_FOUND);
     }
 
-    public function test_get_by()
+    public function test_get_by_id()
     {
         $castMember = CastMember::factory()->create();
         $response = $this->getJson("$this->endpoint/{$castMember->id}");
