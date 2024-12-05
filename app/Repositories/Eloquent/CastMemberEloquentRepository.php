@@ -83,7 +83,10 @@ class CastMemberEloquentRepository implements CastMemberRepositoryInterface
 
     public function delete(string $castMemberId): bool
     {
-        // TODO: Implement delete() method.
+        if(!$castMemberDb = $this->model->find($castMemberId)) {
+            throw new NotFoundException('CastMember not found with id ' . $castMemberId);
+        }
+        return $castMemberDb->delete();
     }
 
     private function toCastMember(object $object): CastMember
