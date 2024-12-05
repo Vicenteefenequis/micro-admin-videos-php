@@ -39,4 +39,13 @@ class CastMemberEloquentRepositoryTest extends TestCase
         $this->assertNotEmpty($response->createdAt());
         $this->assertDatabaseHas('cast_members', ['name' => $entity->name, 'id' => $entity->id]);
     }
+
+    public function testFindById()
+    {
+        $castMember = Model::factory()->create();
+        $response = $this->repository->findById($castMember->id);
+
+        $this->assertInstanceOf(Entity::class, $response);
+        $this->assertDatabaseHas('cast_members', ['name' => $castMember->name, 'id' => $castMember->id]);
+    }
 }
