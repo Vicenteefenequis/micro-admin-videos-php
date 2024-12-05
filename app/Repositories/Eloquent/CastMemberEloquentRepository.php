@@ -6,10 +6,12 @@ use App\Models\CastMember as Model;
 use Carbon\Traits\Cast;
 use Core\Domain\Entity\CastMember;
 use Core\Domain\Enum\CastMemberType;
+use Core\Domain\Exception\NotFoundException;
 use Core\Domain\Repository\CastMemberRepositoryInterface;
 use Core\Domain\Repository\PaginationInterface;
 use Core\Domain\ValueObject\Uuid;
 use DateTime;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CastMemberEloquentRepository implements CastMemberRepositoryInterface
 {
@@ -32,7 +34,10 @@ class CastMemberEloquentRepository implements CastMemberRepositoryInterface
 
     public function findById(string $castMemberId): CastMember
     {
-        // TODO: Implement findById() method.
+        if (!$castMember = $this->model->find($castMemberId)) {
+            throw new NotFoundException('CastMember not found with id ' . $castMemberId);
+        }
+        return $this->toCastMember($castMember);
     }
 
     public function findAll(string $filter = '', $order = 'DESC'): array
