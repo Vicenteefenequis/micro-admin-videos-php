@@ -28,7 +28,7 @@ class CreateCastMemberUseCaseUnitTest extends TestCase
 
         $inputDto = Mockery::mock(CastMemberCreateInputDto::class, [
             'Name',
-            CastMemberType::DIRECTOR
+            1
         ]);
 
         $output = $useCase->execute($inputDto);
@@ -37,7 +37,7 @@ class CreateCastMemberUseCaseUnitTest extends TestCase
 
         $this->assertNotEmpty($output->id);
         $this->assertEquals('Name', $output->name);
-        $this->assertEquals(CastMemberType::DIRECTOR, $output->type);
+        $this->assertEquals(1, $output->type);
         $this->assertNotEmpty($output->created_at);
     }
 }

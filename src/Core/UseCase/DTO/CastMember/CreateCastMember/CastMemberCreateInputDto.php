@@ -8,7 +8,7 @@ class CastMemberCreateInputDto
 {
     public function __construct(
         public string $name,
-        public CastMemberType $type,
+        public int    $type,
     )
     {
     }

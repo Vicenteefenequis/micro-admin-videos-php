@@ -3,6 +3,7 @@
 namespace Core\UseCase\CastMember;
 
 use Core\Domain\Entity\CastMember;
+use Core\Domain\Enum\CastMemberType;
 use Core\Domain\Repository\CastMemberRepositoryInterface;
 use Core\UseCase\DTO\CastMember\CreateCastMember\CastMemberCreateInputDto;
 use Core\UseCase\DTO\CastMember\CreateCastMember\CastMemberCreateOutputDto;
@@ -19,14 +20,14 @@ class CreateCastMemberUseCase
 
         $castMember = new CastMember(
             name: $input->name,
-            type: $input->type,
+            type: CastMemberType::from($input->type),
         );
         $output = $this->castMemberRepository->insert($castMember);
 
         return new CastMemberCreateOutputDto(
             id: $output->id,
             name: $output->name,
-            type: $output->type,
+            type: $output->type->value,
             created_at: $output->createdAt()
         );
     }
