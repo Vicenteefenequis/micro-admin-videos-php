@@ -39,6 +39,17 @@ class CastMemberApiTest extends TestCase
         $response->assertJsonCount(10, 'data');
     }
 
+    public function test_pagination_with_filter()
+    {
+        CastMember::factory()->count(25)->create();
+        CastMember::factory()->count(10)->create([
+            'name' => 'teste'
+        ]);
+        $response = $this->getJson("$this->endpoint?filter=teste");
+        $response->assertStatus(ResponseAlias::HTTP_OK);
+        $response->assertJsonCount(10, 'data');
+    }
+
     public function test_get_by_id_not_found()
     {
         $response = $this->getJson("$this->endpoint/fake_value");
