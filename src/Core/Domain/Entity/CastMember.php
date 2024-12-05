@@ -4,6 +4,7 @@ namespace Core\Domain\Entity;
 
 use Core\Domain\Entity\Traits\MethodsMagicsTrait;
 use Core\Domain\Enum\CastMemberType;
+use Core\Domain\Validation\DomainValidation;
 use Core\Domain\ValueObject\Uuid;
 use DateTime;
 
@@ -20,6 +21,15 @@ class CastMember
     {
         $this->id = $this->id ?? Uuid::random();
         $this->createdAt = $this->createdAt ?? new DateTime();
+
+        $this->validate();
+    }
+
+
+    private function validate(): void
+    {
+        DomainValidation::strMaxLength($this->name);
+        DomainValidation::strMinLength($this->name);
     }
 
 }
