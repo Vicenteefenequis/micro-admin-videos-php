@@ -25,6 +25,13 @@ class CastMember
         $this->validate();
     }
 
+    public function update(string $name)
+    {
+        $this->name = $name;
+        $this->validate();
+
+    }
+
 
     private function validate(): void
     {
