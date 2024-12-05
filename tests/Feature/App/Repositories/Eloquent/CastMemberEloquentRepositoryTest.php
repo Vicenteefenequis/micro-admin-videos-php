@@ -94,4 +94,13 @@ class CastMemberEloquentRepositoryTest extends TestCase
         $this->assertEquals('Teste', $response->name);
         $this->assertEquals(CastMemberType::ACTOR, $response->type);
     }
+
+    public function testUpdateNotFound()
+    {
+        $this->expectException(NotFoundException::class);
+        $this->repository->update(new Entity(
+            name: 'Teste',
+            type: CastMemberType::ACTOR,
+        ));
+    }
 }
