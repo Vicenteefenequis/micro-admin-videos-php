@@ -3,6 +3,7 @@
 namespace Domain\Entity;
 
 use Core\Domain\Enum\Rating;
+use Core\Domain\ValueObject\Image;
 use Core\Domain\ValueObject\Uuid;
 use DateTime;
 use Ramsey\Uuid\Uuid as RamseyUuid;
@@ -219,6 +220,26 @@ class VideoUnitTest extends TestCase
 
 
         $this->assertCount(1, $video->castMembersId);
+    }
+
+    public function testValueObjectImage()
+    {
+        $video = new Video(
+            title: 'new title',
+            description: 'description',
+            yearLaunched: 2029,
+            duration: 12,
+            opened: true,
+            rating: Rating::RATE12,
+            thumbFile: new Image(
+                path: '/img-filmex.png'
+            )
+        );
+
+        $this->assertNotNull($video->thumbFile());
+        $this->assertInstanceOf(Image::class, $video->thumbFile());
+        $this->assertEquals('/img-filmex.png', $video->thumbFile()->path());
+
     }
 
 }
