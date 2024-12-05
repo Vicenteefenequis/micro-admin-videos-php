@@ -41,7 +41,6 @@ class UpdateCastMemberUseCaseUnitTest extends TestCase
         $inputDto = Mockery::mock(CastMemberUpdateInputDto::class, [
             $id,
             'Name',
-            1
         ]);
 
         $output = $useCase->execute($inputDto);
