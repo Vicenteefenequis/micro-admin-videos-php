@@ -8,6 +8,7 @@ use Core\Domain\Entity\CastMember as Entity;
 use Core\Domain\Enum\CastMemberType;
 use Core\Domain\Exception\NotFoundException;
 use Core\Domain\Repository\CastMemberRepositoryInterface;
+use Core\Domain\Repository\PaginationInterface;
 use Tests\TestCase;
 
 class CastMemberEloquentRepositoryTest extends TestCase
@@ -67,5 +68,14 @@ class CastMemberEloquentRepositoryTest extends TestCase
         Model::factory()->count(20)->create();
         $response = $this->repository->findAll();
         $this->assertCount(20, $response);
+    }
+
+    public function testPaginate()
+    {
+        Model::factory()->count(20)->create();
+        $response = $this->repository->paginate();
+        $this->assertInstanceOf(PaginationInterface::class, $response);
+        $this->assertCount(15, $response->items());
+        $this->assertEquals(20, $response->total());
     }
 }
