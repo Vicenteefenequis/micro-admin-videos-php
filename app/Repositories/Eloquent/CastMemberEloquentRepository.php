@@ -3,6 +3,7 @@
 namespace App\Repositories\Eloquent;
 
 use App\Models\CastMember as Model;
+use App\Repositories\Presenters\PaginationPresenter;
 use Carbon\Traits\Cast;
 use Core\Domain\Entity\CastMember;
 use Core\Domain\Enum\CastMemberType;
@@ -54,12 +55,30 @@ class CastMemberEloquentRepository implements CastMemberRepositoryInterface
 
     public function paginate(string $filter = '', $order = 'DESC', int $page = 1, int $totalPage = 15): PaginationInterface
     {
-        // TODO: Implement paginate() method.
+        $query = $this->model;
+
+        if ($filter) {
+            $query->where('name', 'LIKE', '%' . $filter . '%');
+        }
+        $query->orderBy('id', $order);
+        $paginator = $query->paginate();
+
+        return new PaginationPresenter($paginator);
     }
 
     public function update(CastMember $castMember): CastMember
     {
-        // TODO: Implement update() method.
+        if (!$castMemberDb = $this->model->find($castMember->id())) {
+            throw new NotFoundException('CastMember not found with id ' . $castMember->id());
+        }
+
+        $castMemberDb->update([
+            'name' => $castMember->name,
+            'type' => $castMember->type->value,
+        ]);
+
+
+        return $this->toCastMember($castMemberDb);
     }
 
     public function delete(string $castMemberId): bool
