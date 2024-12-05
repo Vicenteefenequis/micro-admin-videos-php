@@ -49,4 +49,117 @@ class VideoUnitTest extends TestCase
         $this->assertNotEmpty($video->id());
     }
 
+    public function testAddCategoryId()
+    {
+        $categoryId = (string)RamseyUuid::uuid4();
+        $video = new Video(
+            title: 'new title',
+            description: 'description',
+            yearLaunched: 2029,
+            duration: 12,
+            opened: true,
+            rating: Rating::RATE12,
+            published: false
+        );
+
+        $this->assertCount(0, $video->categoriesId);
+
+        $video->addCategoryId(
+            categoryId: $categoryId
+        );
+        $video->addCategoryId(
+            categoryId: $categoryId
+        );
+
+
+        $this->assertCount(2, $video->categoriesId);
+    }
+
+    public function testRemoveCategoryId()
+    {
+        $categoryId = (string)RamseyUuid::uuid4();
+        $video = new Video(
+            title: 'new title',
+            description: 'description',
+            yearLaunched: 2029,
+            duration: 12,
+            opened: true,
+            rating: Rating::RATE12,
+            published: false
+        );
+
+        $this->assertCount(0, $video->categoriesId);
+
+        $video->addCategoryId(
+            categoryId: $categoryId
+        );
+        $video->addCategoryId(
+            categoryId: 'uuid'
+        );
+
+        $this->assertCount(2, $video->categoriesId);
+
+        $video->removeCategoryId($categoryId);
+
+
+        $this->assertCount(1, $video->categoriesId);
+    }
+
+
+    public function testAddGenreId()
+    {
+        $genreId = (string)RamseyUuid::uuid4();
+        $video = new Video(
+            title: 'new title',
+            description: 'description',
+            yearLaunched: 2029,
+            duration: 12,
+            opened: true,
+            rating: Rating::RATE12,
+            published: false
+        );
+
+        $this->assertCount(0, $video->genresId);
+
+        $video->addGenreId(
+            genreId: $genreId
+        );
+        $video->addGenreId(
+            genreId: $genreId
+        );
+
+
+        $this->assertCount(2, $video->genresId);
+    }
+
+    public function testRemoveGenreId()
+    {
+        $genreId = (string)RamseyUuid::uuid4();
+        $video = new Video(
+            title: 'new title',
+            description: 'description',
+            yearLaunched: 2029,
+            duration: 12,
+            opened: true,
+            rating: Rating::RATE12,
+            published: false
+        );
+
+        $this->assertCount(0, $video->genresId);
+
+        $video->addGenreId(
+            genreId: $genreId
+        );
+        $video->addGenreId(
+            genreId: 'uuid'
+        );
+
+        $this->assertCount(2, $video->genresId);
+
+        $video->removeGenreId($genreId);
+
+
+        $this->assertCount(1, $video->genresId);
+    }
+
 }
