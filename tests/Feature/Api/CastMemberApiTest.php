@@ -97,4 +97,42 @@ class CastMemberApiTest extends TestCase
         $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
         $response->assertJsonValidationErrors(['name']);
     }
+
+    public function test_update_validation()
+    {
+        $castMember = CastMember::factory()->create();
+        $response = $this->putJson("$this->endpoint/{$castMember->id}", [
+            'name' => '',
+            'type' => 1
+        ]);
+        $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertJsonValidationErrors(['name']);
+    }
+
+    public function test_update_not_found()
+    {
+        $response = $this->putJson("$this->endpoint/fake_value", [
+            'name' => 'Teste',
+            'type' => 1
+        ]);
+        $response->assertStatus(ResponseAlias::HTTP_NOT_FOUND);
+    }
+
+    public function test_update()
+    {
+        $castMember = CastMember::factory()->create();
+        $response = $this->putJson("$this->endpoint/{$castMember->id}", [
+            'name' => 'Updated Name',
+            'type' => 1
+        ]);
+        $response->assertStatus(ResponseAlias::HTTP_OK);
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'name',
+                'type',
+                'created_at'
+            ]
+        ]);
+    }
 }
