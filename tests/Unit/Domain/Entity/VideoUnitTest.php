@@ -147,10 +147,10 @@ class VideoUnitTest extends TestCase
 
         $this->assertCount(0, $video->genresId);
 
-        $video->removeGenreId(
+        $video->addGenreId(
             genreId: $genreId
         );
-        $video->removeGenreId(
+        $video->addGenreId(
             genreId: 'uuid'
         );
 
