@@ -55,4 +55,17 @@ class CastMemberEloquentRepositoryTest extends TestCase
         $this->expectException(NotFoundException::class);
         $this->repository->findById('fake_id');
     }
+
+    public function testFindAllEmpty()
+    {
+        $response = $this->repository->findAll();
+        $this->assertEmpty($response);
+    }
+
+    public function testFindAll()
+    {
+        Model::factory()->count(20)->create();
+        $response = $this->repository->findAll();
+        $this->assertCount(20, $response);
+    }
 }
