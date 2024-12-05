@@ -4,6 +4,7 @@ namespace Core\Domain\Entity;
 
 use Core\Domain\Entity\Traits\MethodsMagicsTrait;
 use Core\Domain\Enum\Rating;
+use Core\Domain\ValueObject\Image;
 use Core\Domain\ValueObject\Uuid;
 use DateTime;
 
@@ -25,6 +26,7 @@ class Video
         protected ?Uuid     $id = null,
         protected bool      $published = false,
         protected ?DateTime $createdAt = null,
+        protected ?Image    $thumbFile = null
     )
     {
         $this->id ??= Uuid::random();
@@ -59,6 +61,11 @@ class Video
     public function removeCastMemberId(string $castMemberId)
     {
         $this->castMembersId = array_diff($this->castMembersId, [$castMemberId]);
+    }
+
+    public function thumbFile(): ?Image
+    {
+        return $this->thumbFile;
     }
 
 }
