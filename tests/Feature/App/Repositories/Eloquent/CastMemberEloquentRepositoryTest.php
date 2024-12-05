@@ -6,6 +6,7 @@ use App\Models\CastMember as Model;
 use App\Repositories\Eloquent\CastMemberEloquentRepository;
 use Core\Domain\Entity\CastMember as Entity;
 use Core\Domain\Enum\CastMemberType;
+use Core\Domain\Exception\NotFoundException;
 use Core\Domain\Repository\CastMemberRepositoryInterface;
 use Tests\TestCase;
 
@@ -47,5 +48,11 @@ class CastMemberEloquentRepositoryTest extends TestCase
 
         $this->assertInstanceOf(Entity::class, $response);
         $this->assertDatabaseHas('cast_members', ['name' => $castMember->name, 'id' => $castMember->id]);
+    }
+
+    public function testFindByIdNotFound()
+    {
+        $this->expectException(NotFoundException::class);
+        $this->repository->findById('fake_id');
     }
 }
