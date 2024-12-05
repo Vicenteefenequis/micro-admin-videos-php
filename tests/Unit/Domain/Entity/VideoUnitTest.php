@@ -14,13 +14,13 @@ class VideoUnitTest extends TestCase
     {
         $id = (string)RamseyUuid::uuid4();
         $video = new Video(
-            id: new Uuid($id),
             title: 'new title',
             description: 'description',
             yearLaunched: 2029,
             duration: 12,
             opened: true,
             rating: Rating::RATE12,
+            id: new Uuid($id),
             published: false
         );
 
