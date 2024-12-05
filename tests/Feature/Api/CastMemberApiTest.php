@@ -69,6 +69,24 @@ class CastMemberApiTest extends TestCase
                 'created_at'
             ]
         ]);
+    }
+
+    public function test_store()
+    {
+        $response = $this->post("$this->endpoint", [
+            'name' => 'Teste',
+            'type' => 1
+        ]);
+        $response->assertStatus(ResponseAlias::HTTP_CREATED);
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'name',
+                'type',
+                'created_at'
+            ]
+        ]);
+
 
     }
 }
