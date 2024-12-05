@@ -12,6 +12,7 @@ class Video
 
     protected array $categoriesId = [];
     protected array $genresId = [];
+    protected array $castMembersId = [];
 
     public function __construct(
         protected string $title,
@@ -45,6 +46,16 @@ class Video
     public function removeGenreId(string $genreId)
     {
         array_splice($this->genresId, array_search($genreId, $this->genresId), 1);
+    }
+
+    public function addCastMemberId(string $castMemberId)
+    {
+        $this->castMembersId[] = $castMemberId;
+    }
+
+    public function removeCastMemberId(string $castMemberId)
+    {
+        $this->castMembersId = array_diff($this->castMembersId, [$castMemberId]);
     }
 
 }
