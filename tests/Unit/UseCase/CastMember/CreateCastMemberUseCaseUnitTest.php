@@ -39,5 +39,7 @@ class CreateCastMemberUseCaseUnitTest extends TestCase
         $this->assertEquals('Name', $output->name);
         $this->assertEquals(1, $output->type);
         $this->assertNotEmpty($output->created_at);
+
+        Mockery::close();
     }
 }
