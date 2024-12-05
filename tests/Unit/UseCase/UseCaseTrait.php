@@ -3,6 +3,8 @@
 namespace Tests\Unit\UseCase;
 
 use Core\Domain\Repository\PaginationInterface;
+use Mockery;
+use stdClass;
 
 trait UseCaseTrait
 {
