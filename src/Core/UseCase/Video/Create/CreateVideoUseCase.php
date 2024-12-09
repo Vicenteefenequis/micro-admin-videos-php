@@ -23,11 +23,6 @@ class CreateVideoUseCase extends BaseVideoUseCase
 
             $this->repository->updateMedia($this->builder->getEntity());
 
-
-            // storage media, using $id of entity persist
-
-            // $eventManager to dispatch event
-
             $this->transaction->commit();
             return $this->output();
         } catch (Throwable $th) {

@@ -2,20 +2,15 @@
 
 namespace Core\UseCase\Video;
 
-use Core\Domain\Repository\{
-    CastMemberRepositoryInterface,
-    CategoryRepositoryInterface,
-    GenreRepositoryInterface,
-    VideoRepositoryInterface
-};
+use Core\Domain\Builder\Video\BuilderVideo;
 use Core\Domain\Enum\MediaStatus;
 use Core\Domain\Events\VideoCreatedEvent;
 use Core\Domain\Exception\NotFoundException;
-use Core\UseCase\Interfaces\{
-    FileStorageInterface,
-    TransactionInterface
-};
-use Core\UseCase\Video\Builder\BuilderVideo;
+use Core\Domain\Repository\{CastMemberRepositoryInterface,
+    CategoryRepositoryInterface,
+    GenreRepositoryInterface,
+    VideoRepositoryInterface};
+use Core\UseCase\Interfaces\{FileStorageInterface, TransactionInterface};
 use Core\UseCase\Video\Interfaces\VideoEventManagerInterface;
 
 abstract class BaseVideoUseCase
