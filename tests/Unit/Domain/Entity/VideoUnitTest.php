@@ -4,6 +4,7 @@ namespace Domain\Entity;
 
 use Core\Domain\Enum\MediaStatus;
 use Core\Domain\Enum\Rating;
+use Core\Domain\Exception\EntityValidationException;
 use Core\Domain\ValueObject\Image;
 use Core\Domain\ValueObject\Media;
 use Core\Domain\ValueObject\Uuid;
@@ -329,6 +330,22 @@ class VideoUnitTest extends TestCase
         $this->assertNotNull($video->videoFile());
         $this->assertInstanceOf(Media::class, $video->videoFile());
         $this->assertEquals('path/video.mp4', $video->videoFile()->filePath);
+    }
+
+
+    public function testValidations()
+    {
+        $this->expectException(EntityValidationException::class);
+
+        new Video(
+            title: 'ne',
+            description: 'de',
+            yearLaunched: 2029,
+            duration: 12,
+            opened: true,
+            rating: Rating::RATE12,
+        );
+
     }
 
 }
