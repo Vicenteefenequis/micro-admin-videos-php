@@ -345,7 +345,6 @@ class VideoUnitTest extends TestCase
             opened: true,
             rating: Rating::RATE12,
         );
-
     }
 
 }
