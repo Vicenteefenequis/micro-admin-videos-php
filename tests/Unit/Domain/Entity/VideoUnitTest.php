@@ -5,6 +5,7 @@ namespace Domain\Entity;
 use Core\Domain\Enum\MediaStatus;
 use Core\Domain\Enum\Rating;
 use Core\Domain\Exception\EntityValidationException;
+use Core\Domain\Notification\NotificationException;
 use Core\Domain\ValueObject\Image;
 use Core\Domain\ValueObject\Media;
 use Core\Domain\ValueObject\Uuid;
@@ -333,9 +334,9 @@ class VideoUnitTest extends TestCase
     }
 
 
-    public function testValidations()
+    public function testException()
     {
-        $this->expectException(EntityValidationException::class);
+        $this->expectException(NotificationException::class);
 
         new Video(
             title: 'ne',
