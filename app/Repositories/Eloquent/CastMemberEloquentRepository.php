@@ -101,4 +101,11 @@ class CastMemberEloquentRepository implements CastMemberRepositoryInterface
 
         return $entity;
     }
+
+    public function getIdsListIds(array $castMembersIds = []): array
+    {
+        return $this->model->whereIn('id', $castMembersIds)
+            ->pluck('id')
+            ->toArray();
+    }
 }
