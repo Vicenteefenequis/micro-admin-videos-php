@@ -4,6 +4,7 @@ namespace Core\Domain\Entity;
 
 use Core\Domain\Entity\Traits\MethodsMagicsTrait;
 use Core\Domain\Enum\Rating;
+use Core\Domain\Validation\DomainValidation;
 use Core\Domain\ValueObject\Image;
 use Core\Domain\ValueObject\Media;
 use Core\Domain\ValueObject\Uuid;
@@ -36,6 +37,7 @@ class Video
     {
         $this->id ??= Uuid::random();
         $this->createdAt ??= new DateTime();
+        $this->validation();
     }
 
     public
@@ -101,6 +103,13 @@ class Video
     public function videoFile(): ?Media
     {
         return $this->videoFile;
+    }
+
+    protected function validation()
+    {
+        DomainValidation::notNull($this->title);
+        DomainValidation::strMinLength($this->title);
+        DomainValidation::strCanNullAndMaxLength($this->description);
     }
 
 }
