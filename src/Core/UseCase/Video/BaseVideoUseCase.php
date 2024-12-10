@@ -79,7 +79,7 @@ abstract class BaseVideoUseCase
 
     protected function validateAllIds(object $input)
     {
-        $this->validateIds($input->categories, $this->repositoryCategory, 'Category');
+        $this->validateIds($input->categories, $this->repositoryCategory, 'Category', 'Categories');
         $this->validateIds($input->castMembers, $this->repositoryCastMember, 'CastMember');
         $this->validateIds($input->genres, $this->repositoryGenre, 'Genre');
     }
