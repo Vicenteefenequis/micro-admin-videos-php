@@ -26,14 +26,18 @@ class CreateVideoUseCaseUnitTest extends TestCase
 
     protected function createUseCase(
         int $timesCallMethodActionRepository = 1,
-        int $timesCallMethodUpdateMediaRepository = 1
+        int $timesCallMethodUpdateMediaRepository = 1,
+        int $timesCallMethodCommitTransaction = 1,
+        int $timesCallMethodRollbackTransaction = 0,
     )
     {
         $this->useCase = new UseCase(
             repository: $this->createMockRepository(
                 timesCallAction: $timesCallMethodActionRepository, timesCallUpdateMedia: $timesCallMethodUpdateMediaRepository
             ),
-            transaction: $this->createMockTransaction(),
+            transaction: $this->createMockTransaction(
+                timesCallCommit: $timesCallMethodCommitTransaction, timesCallRollback: $timesCallMethodRollbackTransaction
+            ),
             storage: $this->createMockFileStorage(),
             eventManager: $this->createMockEventManager(),
             repositoryCategory: $this->createMockRepositoryCategory(),
@@ -60,7 +64,7 @@ class CreateVideoUseCaseUnitTest extends TestCase
         array  $ids
     )
     {
-        $this->createUseCase(0, 0);
+        $this->createUseCase(0, 0, 0);
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage(sprintf("%s %s not found", $label, implode(', ', $ids)));
 
@@ -180,11 +184,14 @@ class CreateVideoUseCaseUnitTest extends TestCase
     }
 
 
-    private function createMockTransaction()
+    private function createMockTransaction(
+        int $timesCallCommit,
+        int $timesCallRollback
+    )
     {
         $mockTransaction = Mockery::mock(stdClass::class, TransactionInterface::class);
-        $mockTransaction->shouldReceive('commit');
-        $mockTransaction->shouldReceive('rollback');
+        $mockTransaction->shouldReceive('commit')->times($timesCallCommit);
+        $mockTransaction->shouldReceive('rollback')->times($timesCallRollback);
         return $mockTransaction;
     }
 
