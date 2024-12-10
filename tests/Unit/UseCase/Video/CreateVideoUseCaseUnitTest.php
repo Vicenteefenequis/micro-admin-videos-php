@@ -23,10 +23,16 @@ class CreateVideoUseCaseUnitTest extends TestCase
 {
     protected UseCase $useCase;
 
-    protected function setUp(): void
+
+    protected function createUseCase(
+        int $timesCallMethodActionRepository = 1,
+        int $timesCallMethodUpdateMediaRepository = 1
+    )
     {
         $this->useCase = new UseCase(
-            repository: $this->createMockRepository(),
+            repository: $this->createMockRepository(
+                timesCallAction: $timesCallMethodActionRepository, timesCallUpdateMedia: $timesCallMethodUpdateMediaRepository
+            ),
             transaction: $this->createMockTransaction(),
             storage: $this->createMockFileStorage(),
             eventManager: $this->createMockEventManager(),
@@ -34,11 +40,11 @@ class CreateVideoUseCaseUnitTest extends TestCase
             repositoryGenre: $this->createMockRepositoryGenre(),
             repositoryCastMember: $this->createMockRepositoryCastMembers()
         );
-        parent::setUp();
     }
 
     public function test_exec_input_output()
     {
+        $this->createUseCase();
         $response = $this->useCase->execute(
             input: $this->createMockInputDto()
         );
@@ -54,6 +60,7 @@ class CreateVideoUseCaseUnitTest extends TestCase
         array  $ids
     )
     {
+        $this->createUseCase(0, 0);
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage(sprintf("%s %s not found", $label, implode(', ', $ids)));
 
@@ -82,6 +89,7 @@ class CreateVideoUseCaseUnitTest extends TestCase
         array $banner
     )
     {
+        $this->createUseCase();
         $response = $this->useCase->execute(
             input: $this->createMockInputDto(
                 videoFile: $video['value'],
@@ -135,11 +143,18 @@ class CreateVideoUseCaseUnitTest extends TestCase
     }
 
 
-    private function createMockRepository()
+    private function createMockRepository(
+        int $timesCallAction,
+        int $timesCallUpdateMedia
+    )
     {
         $mockRepo = Mockery::mock(stdClass::class, VideoRepositoryInterface::class);
-        $mockRepo->shouldReceive('insert')->andReturn($this->createMockEntity());
-        $mockRepo->shouldReceive('updateMedia')->andReturn($this->createMockEntity());
+        $mockRepo->shouldReceive('insert')
+            ->times($timesCallAction)
+            ->andReturn($this->createMockEntity());
+        $mockRepo->shouldReceive('updateMedia')
+            ->times($timesCallUpdateMedia)
+            ->andReturn($this->createMockEntity());
         return $mockRepo;
     }
 
@@ -221,5 +236,11 @@ class CreateVideoUseCaseUnitTest extends TestCase
         return Mockery::mock(Video::class, [
             'Title', 'Description', 2020, 12, true, Rating::RATE12
         ]);
+    }
+
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
     }
 }
