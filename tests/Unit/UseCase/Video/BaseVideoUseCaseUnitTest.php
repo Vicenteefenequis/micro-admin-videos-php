@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\UseCase\Video;
 
-use Core\Domain\Entity\Video;
+use Core\Domain\Entity\Video as Entity;
 use Core\Domain\Enum\Rating;
 use Core\Domain\Exception\NotFoundException;
 use Core\Domain\Repository\CastMemberRepositoryInterface;
@@ -178,27 +178,28 @@ abstract class BaseVideoUseCaseUnitTest extends TestCase
         $mockRepo->shouldReceive($this->nameActionRepository())
             ->times($timesCallAction)
             ->andReturn($this->createMockEntity());
+        $mockRepo->shouldReceive('findById')->andReturn($this->createMockEntity());
         $mockRepo->shouldReceive('updateMedia')
             ->times($timesCallUpdateMedia)
             ->andReturn($this->createMockEntity());
         return $mockRepo;
     }
 
-    protected  function createMockRepositoryCategory(array $categoriesResponse = [])
+    protected function createMockRepositoryCategory(array $categoriesResponse = [])
     {
         $mockRepo = Mockery::mock(stdClass::class, CategoryRepositoryInterface::class);
         $mockRepo->shouldReceive('getIdsListIds')->andReturn($categoriesResponse);
         return $mockRepo;
     }
 
-    protected  function createMockRepositoryGenre(array $genresResponse = [])
+    protected function createMockRepositoryGenre(array $genresResponse = [])
     {
         $mockRepo = Mockery::mock(stdClass::class, GenreRepositoryInterface::class);
         $mockRepo->shouldReceive('getIdsListIds')->andReturn($genresResponse);
         return $mockRepo;
     }
 
-    protected  function createMockRepositoryCastMembers(array $castMembers = [])
+    protected function createMockRepositoryCastMembers(array $castMembers = [])
     {
         $mockRepo = Mockery::mock(stdClass::class, CastMemberRepositoryInterface::class);
         $mockRepo->shouldReceive('getIdsListIds')->andReturn($castMembers);
@@ -206,7 +207,7 @@ abstract class BaseVideoUseCaseUnitTest extends TestCase
     }
 
 
-    protected  function createMockTransaction(
+    protected function createMockTransaction(
         int $timesCallCommit,
         int $timesCallRollback
     )
@@ -217,7 +218,7 @@ abstract class BaseVideoUseCaseUnitTest extends TestCase
         return $mockTransaction;
     }
 
-    protected  function createMockFileStorage(
+    protected function createMockFileStorage(
         int $timesCall
     )
     {
@@ -226,7 +227,7 @@ abstract class BaseVideoUseCaseUnitTest extends TestCase
         return $mockFileStorage;
     }
 
-    protected  function createMockEventManager(
+    protected function createMockEventManager(
         int $timesCall
     )
     {
@@ -236,11 +237,16 @@ abstract class BaseVideoUseCaseUnitTest extends TestCase
     }
 
 
-    protected  function createMockEntity()
+    protected function createMockEntity()
     {
-        return Mockery::mock(Video::class, [
-            'Title', 'Description', 2020, 12, true, Rating::RATE12
-        ]);
+        return new Entity(
+            title: 'title',
+            description: 'description',
+            yearLaunched: 2020,
+            duration: 20,
+            opened: true,
+            rating: Rating::ER
+        );
     }
 
     protected function tearDown(): void

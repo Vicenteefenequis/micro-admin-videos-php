@@ -2,20 +2,21 @@
 
 namespace Core\UseCase\Video;
 
-use Core\Domain\Builder\Video\BuilderVideo;
+use Core\Domain\Builder\Video\Builder;
 use Core\Domain\Enum\MediaStatus;
 use Core\Domain\Events\VideoCreatedEvent;
 use Core\Domain\Exception\NotFoundException;
 use Core\Domain\Repository\{CastMemberRepositoryInterface,
     CategoryRepositoryInterface,
     GenreRepositoryInterface,
-    VideoRepositoryInterface};
+    VideoRepositoryInterface
+};
 use Core\UseCase\Interfaces\{FileStorageInterface, TransactionInterface};
 use Core\UseCase\Video\Interfaces\VideoEventManagerInterface;
 
 abstract class BaseVideoUseCase
 {
-    protected BuilderVideo $builder;
+    protected Builder $builder;
 
     public function __construct(
         protected VideoRepositoryInterface      $repository,
@@ -27,8 +28,10 @@ abstract class BaseVideoUseCase
         protected CastMemberRepositoryInterface $repositoryCastMember,
     )
     {
-        $this->builder = new BuilderVideo();
+        $this->builder = $this->getBuilder();
     }
+
+    abstract protected function getBuilder(): Builder;
 
     protected function storageFiles(object $input): void
     {

@@ -1,30 +1,36 @@
 <?php
 
-namespace Core\UseCase\Video\Create;
+namespace Core\UseCase\Video\Update;
 
 use Core\Domain\Builder\Video\Builder;
-use Core\Domain\Builder\Video\BuilderVideo;
+use Core\Domain\Builder\Video\UpdateVideoBuilder;
 use Core\UseCase\Video\BaseVideoUseCase;
-use Core\UseCase\Video\Create\DTO\{
-    CreateInputVideoDTO,
-    CreateOutputVideoDTO
-};
+use Core\UseCase\Video\Update\DTO\UpdateInputVideoDTO;
+use Core\UseCase\Video\Update\DTO\UpdateOutputVideoDTO;
 use Throwable;
 
-class CreateVideoUseCase extends BaseVideoUseCase
+class UpdateVideoUseCase extends BaseVideoUseCase
 {
+
     protected function getBuilder(): Builder
     {
-        return new BuilderVideo();
+        return new UpdateVideoBuilder;
     }
 
-    public function execute(CreateInputVideoDTO $input): CreateOutputVideoDTO
+    public function execute(UpdateInputVideoDTO $input): UpdateOutputVideoDTO
     {
         $this->validateAllIds($input);
-        $this->builder->createEntity($input);
+
+        $entity = $this->repository->findById($input->id);
+        $entity->update(
+            title: $input->title,
+            description: $input->description,
+        );
+
+        $this->builder->setEntity($entity);
 
         try {
-            $this->repository->insert($this->builder->getEntity());
+            $this->repository->update($this->builder->getEntity());
 
             $this->storageFiles($input);
 
@@ -38,14 +44,12 @@ class CreateVideoUseCase extends BaseVideoUseCase
             // (isset($pathMedia)) $this->storage->delete($pathMedia);
             throw $th;
         }
-
     }
 
-
-    private function output(): CreateOutputVideoDTO
+    private function output(): UpdateOutputVideoDTO
     {
         $entity = $this->builder->getEntity();
-        return new CreateOutputVideoDTO(
+        return new UpdateOutputVideoDTO(
             id: $entity->id(),
             title: $entity->title,
             description: $entity->description,
@@ -63,6 +67,4 @@ class CreateVideoUseCase extends BaseVideoUseCase
             bannerFile: $entity->bannerFile()?->path(),
         );
     }
-
-
 }
